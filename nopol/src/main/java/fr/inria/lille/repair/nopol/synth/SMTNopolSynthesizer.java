@@ -49,6 +49,8 @@ public final class SMTNopolSynthesizer<T> implements Synthesizer {
 	private NopolContext nopolContext;//TODO remove this unused field
 
 	public SMTNopolSynthesizer(SpoonedProject spoonedProject, AngelicValue angelicValue, SourceLocation sourceLocation, StatementType type, NopolProcessor processor, NopolContext nopolContext) {
+		System.err.println("######## SMTNopolSynthesizer.new");
+
 		this.angelicValue = angelicValue;
 		this.nopolContext = nopolContext;
 		this.sourceLocation = sourceLocation;
@@ -64,7 +66,9 @@ public final class SMTNopolSynthesizer<T> implements Synthesizer {
 	 */
 	@Override
 	public List<Patch> buildPatch(URL[] classpath, List<TestResult> testClasses, Collection<TestCase> failures, long maxTimeBuildPatch) {
-		final Collection<Specification<T>> data = angelicValue.collectSpecifications(classpath, testClasses, failures);
+		System.err.println("######## SMTNopolSynthesizer.buildPatch");
+
+		final Collection<Specification<T>> data = angelicValue.collectSpecifications(classpath, testClasses, failures);//ANGELIC RELATED ??
 
 		// XXX FIXME TODO move this
 		// there should be at least two sets of values, otherwise the patch would be "true" or "false"

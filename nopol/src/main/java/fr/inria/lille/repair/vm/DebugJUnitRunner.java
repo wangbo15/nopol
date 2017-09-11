@@ -79,7 +79,7 @@ public class DebugJUnitRunner {
                 "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y",
                 "-cp",
                 strClasspath,
-                MethodTestRunner.class.getCanonicalName(),
+                MethodTestRunner.class.getCanonicalName(),  //TO RUN SINGLE TEST MTD BY: fr.inria.lille.repair.MethodTestRunner
                 testList
         );
         System.out.println("java -cp " + strClasspath + " " + MethodTestRunner.class.getCanonicalName() + " " + testList);

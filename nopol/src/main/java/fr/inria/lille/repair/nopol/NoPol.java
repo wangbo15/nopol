@@ -136,7 +136,7 @@ public class NoPol {
 		Map<SourceLocation, List<TestResult>> testListPerStatement = this.localizer.getTestListPerStatement();
 
 		this.nopolResult.setNbStatements(testListPerStatement.keySet().size());
-		solveWithMultipleBuild(testListPerStatement);
+		solveWithMultipleBuild(testListPerStatement);	//IMPORTANT
 
 		this.logResultInfo(this.nopolResult.getPatches());
 
@@ -183,7 +183,7 @@ public class NoPol {
 	 */
 	private void solveWithMultipleBuild(Map<SourceLocation, List<TestResult>> testListPerStatement) {
 		for (SourceLocation sourceLocation : testListPerStatement.keySet()) {
-			runOnStatement(sourceLocation, testListPerStatement.get(sourceLocation));
+			runOnStatement(sourceLocation, testListPerStatement.get(sourceLocation));//ANGELIC RELATED
 			if (nopolContext.isOnlyOneSynthesisResult() && !this.nopolResult.getPatches().isEmpty()) {
 				return;
 			}
@@ -228,7 +228,7 @@ public class NoPol {
 				new Callable() {
 					@Override
 					public Object call() throws Exception {
-						return runNopolProcessor(tests, sourceLocation, spoonCl, nopolProcessor);
+						return runNopolProcessor(tests, sourceLocation, spoonCl, nopolProcessor);	//GET PATCHES
 					}
 				});
 		try {
@@ -241,10 +241,13 @@ public class NoPol {
 	}
 
 	private List<Patch> runNopolProcessor(List<TestResult> tests, SourceLocation sourceLocation, SpoonedClass spoonCl, NopolProcessor nopolProcessor) {
+
+		System.err.println("######## Nopol.runNopolProcessor");
+
 		AngelicValue angelicValue;
 		List<Patch> patches = new ArrayList<>();
 		try {
-			angelicValue = buildConstraintsModelBuilder(nopolProcessor, sourceLocation, spooner);
+			angelicValue = buildConstraintsModelBuilder(nopolProcessor, sourceLocation, spooner);	//ANGELIC VALUE COLLECTED HERE ??
 		} catch (UnsupportedOperationException | DynamicCompilationException ignored) {
 			return patches;
 		}
@@ -253,7 +256,7 @@ public class NoPol {
 			this.nopolResult.incrementNbAngelicValues();
 		}
 
-		Synthesizer synth = SynthesizerFactory.build(sourceFiles, spooner, nopolContext, sourceLocation, nopolProcessor, angelicValue, spoonCl);
+		Synthesizer synth = SynthesizerFactory.build(sourceFiles, spooner, nopolContext, sourceLocation, nopolProcessor, angelicValue, spoonCl);//ANGELIC RUNNER
 		if (synth == Synthesizer.NO_OP_SYNTHESIZER) {
 			return patches;
 		}
@@ -281,11 +284,15 @@ public class NoPol {
 	}
 
 	private AngelicValue buildConstraintsModelBuilder(NopolProcessor nopolProcessor, SourceLocation statement, SpoonedFile spoonCl) {
+
 		if (Boolean.class.equals(nopolContext.getType().getType())) {
 			RuntimeValues<Boolean> runtimeValuesInstance = RuntimeValues.newInstance();
 			switch (nopolContext.getOracle()) {
 				case ANGELIC:
-					Processor<CtStatement> processor = new ConditionalLoggingInstrumenter(runtimeValuesInstance, nopolProcessor);
+
+					System.err.println("######## Nopol.buildConstraintsModelBuilder");// Because of mutlt-thread, debugger cannot stop here
+
+					Processor<CtStatement> processor = new ConditionalLoggingInstrumenter(runtimeValuesInstance, nopolProcessor); // Here, instrument angelic?
 					return new ConstraintModelBuilder(runtimeValuesInstance, statement, processor, spooner, nopolContext);
 				case SYMBOLIC:
 					return new JPFRunner<>(runtimeValuesInstance, statement, nopolProcessor, spoonCl, spooner, nopolContext);

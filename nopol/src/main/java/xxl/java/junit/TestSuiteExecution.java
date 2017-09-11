@@ -78,7 +78,7 @@ public class TestSuiteExecution {
     }
 
     public static CompoundResult runTestCases(Collection<TestCase> testCases, ClassLoader classLoaderForTestThread, RunListener listener, NopolContext nopolContext) {
-        List<Result> results = MetaList.newArrayList(testCases.size());
+        List<Result> results = MetaList.newArrayList(testCases.size()); //Result of junit
         for (TestCase testCase : testCases) {
             String completeTestName = testCase.className()+"#"+testCase.testName();
             if (!nopolContext.getTestMethodsToIgnore().contains(completeTestName)) {

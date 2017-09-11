@@ -53,12 +53,19 @@ public final class ConstraintModelBuilder implements AngelicValue<Boolean> {
     private NopolContext nopolContext;
 
     public ConstraintModelBuilder(RuntimeValues<Boolean> runtimeValues, SourceLocation sourceLocation, Processor<?> processor, SpoonedProject spooner, NopolContext nopolContext) {
+        System.err.println("######## ConstraintModelBuilder.new");
+//        System.err.println("\t" + runtimeValues);
+
+
         this.sourceLocation = sourceLocation;
         this.nopolContext = nopolContext;
         String qualifiedName = sourceLocation.getRootClassName();
+
+        System.err.println("\t qualifiedName: " + qualifiedName);
+
         SpoonedClass fork = spooner.forked(qualifiedName);
         try {
-            classLoader = fork.processedAndDumpedToClassLoader(processor);
+            classLoader = fork.processedAndDumpedToClassLoader(processor);  // why classLoader
         } catch (DynamicCompilationException e) {
             logger.error("Unable to compile the change: \n" + fork.getSimpleType());
             throw e;
@@ -74,12 +81,23 @@ public final class ConstraintModelBuilder implements AngelicValue<Boolean> {
     /**
      * @see AngelicValue#collectSpecifications(URL[], List, Collection)
      */
-    public Collection<Specification<Boolean>> collectSpecifications(URL[] classpath, List<TestResult> testClasses, Collection<TestCase> failures) {
+    public Collection<Specification<Boolean>> collectSpecifications(URL[] classpath, List<TestResult> testClasses, Collection<TestCase> failures) {//ANGELIC RELATED?
+
+        System.err.println("######## ConstraintModelBuilder.collectSpecifications");
+        System.err.println("\tfailures: " + failures.toString());
+
         SpecificationTestCasesListener<Boolean> listener = new SpecificationTestCasesListener<>(runtimeValues);
         AngelicExecution.enable();
         CompoundResult firstResult = TestSuiteExecution.runTestCases(failures, classLoader, listener, nopolContext);
+
+        System.err.println("\tfirstResult: " + firstResult);
+
         AngelicExecution.flip();
         CompoundResult secondResult = TestSuiteExecution.runTestCases(failures, classLoader, listener, nopolContext);
+
+        System.err.println("\tsecondResult: " + secondResult);
+
+
         AngelicExecution.disable();
         if (determineViability(firstResult, secondResult)) {
             /* to collect information for passing tests */

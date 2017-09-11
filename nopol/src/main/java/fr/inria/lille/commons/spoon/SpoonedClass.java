@@ -12,6 +12,9 @@ public class SpoonedClass extends SpoonedFile {
 
     public SpoonedClass(SpoonedProject parentProject, CtType<?> modelledClass, NopolContext nopolContext) {
         super(new File[] { modelledClass.getPosition().getFile() }, nopolContext);
+
+        System.err.println("######## SpoonedClass.new");
+
         this.simpleType = modelledClass;
         this.parentProject = parentProject;
         qualifiedClassName = modelledClass.getQualifiedName();

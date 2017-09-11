@@ -144,6 +144,9 @@ public abstract class SpoonedFile {
     }
 
     protected synchronized void processModelledClasses(Collection<? extends CtType<?>> modelledClasses, Collection<? extends Processor<?>> processors) {
+
+        System.err.println("######## SpoonedFile.processModelledClasses");
+
         setProcessors(processors);
         for (CtType<?> modelledClass : modelledClasses) {
             String qualifiedName = modelledClass.getQualifiedName();

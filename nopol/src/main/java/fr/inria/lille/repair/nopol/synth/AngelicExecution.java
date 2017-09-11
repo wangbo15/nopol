@@ -25,6 +25,8 @@ public final class AngelicExecution {
     }
 
     public static void setBooleanValue(boolean booleanValue) {
+        System.out.println("#### AngelicExecution.setBooleanValue: SET TO: " + booleanValue);
+
         AngelicExecution.booleanValue = booleanValue;
     }
 
