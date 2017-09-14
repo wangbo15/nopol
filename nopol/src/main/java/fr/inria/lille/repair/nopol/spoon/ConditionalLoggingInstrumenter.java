@@ -32,7 +32,7 @@ public final class ConditionalLoggingInstrumenter extends AbstractProcessor<CtSt
     public void process(CtStatement statement) {
         String evaluationAccess = "runtimeAngelicValue";
 
-        CtLocalVariable defaultValue = newLocalVariableDeclarationString(statement.getFactory(), Boolean.class, "spoonDefaultValue", "false");
+        CtLocalVariable defaultValue = newLocalVariableDeclarationString(statement.getFactory(), Boolean.class, "spoonDefaultValue", "false");//"spoonDefaultValue = tmp != 0;"
         insertBeforeUnderSameParent(defaultValue, statement);
 
         CtTry aTry = getFactory().Core().createTry();
@@ -49,10 +49,10 @@ public final class ConditionalLoggingInstrumenter extends AbstractProcessor<CtSt
         insertBeforeUnderSameParent(aTry, statement);
 
         String evaluationValue = angelicInvocation("spoonDefaultValue");
-        CtLocalVariable<Boolean> evaluation = newLocalVariableDeclaration(statement.getFactory(), Boolean.class, evaluationAccess, evaluationValue);
+        CtLocalVariable<Boolean> evaluation = newLocalVariableDeclaration(statement.getFactory(), Boolean.class, evaluationAccess, evaluationValue);//Boolean runtimeAngelicValue = AngelicExecution.angelicValue(spoonDefaultValue);
         insertBeforeUnderSameParent(evaluation, statement);
-        appendValueCollection(statement, evaluationAccess, "spoonDefaultValue");
-        ((ConditionalProcessor) subprocessor()).processCondition(statement, evaluationAccess);
+        appendValueCollection(statement, evaluationAccess, "spoonDefaultValue");//COLLECT WATCHING VARIABLES
+        ((ConditionalProcessor) subprocessor()).processCondition(statement, evaluationAccess);//REPALCE IF CONDITION TO "runtimeAngelicValue"
     }
 
     protected String angelicInvocation(String booleanSnippet) {
@@ -62,7 +62,7 @@ public final class ConditionalLoggingInstrumenter extends AbstractProcessor<CtSt
     public void appendValueCollection(CtStatement element, String outputName, String... ignore) {
         CollectableValueFinder finder;
         if (CtIf.class.isInstance(element)) {
-            finder = CollectableValueFinder.valueFinderFromIf((CtIf) element);
+            finder = CollectableValueFinder.valueFinderFromIf((CtIf) element);//GET ALL VARIABLES
         } else {
             finder = CollectableValueFinder.valueFinderFrom(element);
         }

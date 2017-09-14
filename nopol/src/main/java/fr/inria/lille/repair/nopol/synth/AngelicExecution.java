@@ -11,7 +11,7 @@ public final class AngelicExecution {
         return AngelicExecution.class.getName() + ".angelicValue(" + booleanSnippet + ")";
     }
 
-    public static boolean angelicValue(boolean condition) {
+    public static boolean angelicValue(boolean condition) {//CALLED BY INSTRUMENTER
         if (enabled()) {
             previousValue.add(booleanValue());
             return booleanValue();

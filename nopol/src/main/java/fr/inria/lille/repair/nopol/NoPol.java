@@ -190,7 +190,7 @@ public class NoPol {
 		}
 	}
 
-	private void runOnStatement(SourceLocation sourceLocation, List<TestResult> tests) {
+	private void runOnStatement(SourceLocation sourceLocation, List<TestResult> tests) {//MODIFY SRC
 		logger.debug("Analysing {} which is executed by {} tests", sourceLocation, tests.size());
 		SpoonedClass spoonCl = spooner.forked(sourceLocation.getRootClassName());
 		if (spoonCl == null || spoonCl.getSimpleType() == null) {
@@ -198,7 +198,7 @@ public class NoPol {
 		}
 		NopolProcessorBuilder builder = new NopolProcessorBuilder(spoonCl.getSimpleType().getPosition().getFile(), sourceLocation.getLineNumber(), nopolContext);
 		try {
-			spoonCl.process(builder);
+			spoonCl.process(builder);//compile original java file??
 		} catch (DynamicCompilationException ignored) {
 			logger.debug("Aborting: dynamic compilation failed");
 			return;
@@ -210,7 +210,7 @@ public class NoPol {
 			sourceLocation.setSourceStart(position.getSourceStart());
 			sourceLocation.setSourceEnd(position.getSourceEnd());
 
-			List<Patch> patches = executeNopolProcessor(tests, sourceLocation, spoonCl, nopolProcessor);
+			List<Patch> patches = executeNopolProcessor(tests, sourceLocation, spoonCl, nopolProcessor);//GET PATCHES
 			this.nopolResult.addPatches(patches);
 
 			if (nopolContext.isOnlyOneSynthesisResult() && !patches.isEmpty()) {
@@ -247,7 +247,7 @@ public class NoPol {
 		AngelicValue angelicValue;
 		List<Patch> patches = new ArrayList<>();
 		try {
-			angelicValue = buildConstraintsModelBuilder(nopolProcessor, sourceLocation, spooner);	//ANGELIC VALUE COLLECTED HERE ??
+			angelicValue = buildConstraintsModelBuilder(nopolProcessor, sourceLocation, spooner);	//INSTRUMENT AND GET ANGELIC VALUE
 		} catch (UnsupportedOperationException | DynamicCompilationException ignored) {
 			return patches;
 		}
@@ -292,8 +292,8 @@ public class NoPol {
 
 					System.err.println("######## Nopol.buildConstraintsModelBuilder");// Because of mutlt-thread, debugger cannot stop here
 
-					Processor<CtStatement> processor = new ConditionalLoggingInstrumenter(runtimeValuesInstance, nopolProcessor); // Here, instrument angelic?
-					return new ConstraintModelBuilder(runtimeValuesInstance, statement, processor, spooner, nopolContext);
+					Processor<CtStatement> processor = new ConditionalLoggingInstrumenter(runtimeValuesInstance, nopolProcessor);
+					return new ConstraintModelBuilder(runtimeValuesInstance, statement, processor, spooner, nopolContext);	//INSTRUMENT HERE!!
 				case SYMBOLIC:
 					return new JPFRunner<>(runtimeValuesInstance, statement, nopolProcessor, spoonCl, spooner, nopolContext);
 			}

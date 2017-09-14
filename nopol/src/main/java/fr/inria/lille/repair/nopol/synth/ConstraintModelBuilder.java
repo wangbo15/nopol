@@ -65,7 +65,7 @@ public final class ConstraintModelBuilder implements AngelicValue<Boolean> {
 
         SpoonedClass fork = spooner.forked(qualifiedName);
         try {
-            classLoader = fork.processedAndDumpedToClassLoader(processor);  // why classLoader
+            classLoader = fork.processedAndDumpedToClassLoader(processor);  // HERE! HERE! TODO: learn dynamicClassLoader
         } catch (DynamicCompilationException e) {
             logger.error("Unable to compile the change: \n" + fork.getSimpleType());
             throw e;

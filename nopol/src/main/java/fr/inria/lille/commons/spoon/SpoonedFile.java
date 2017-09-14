@@ -142,7 +142,7 @@ public abstract class SpoonedFile {
     public void process(Collection<? extends Processor<?>> processors) {
         processModelledClasses(modelledClasses(), processors);
     }
-
+    //INSTRUMENT SRC
     protected synchronized void processModelledClasses(Collection<? extends CtType<?>> modelledClasses, Collection<? extends Processor<?>> processors) {
 
         System.err.println("######## SpoonedFile.processModelledClasses");
@@ -152,12 +152,12 @@ public abstract class SpoonedFile {
             String qualifiedName = modelledClass.getQualifiedName();
             //logDebug(logger(), format("[Spoon processing of %s]", qualifiedName));
             try {
-                processingManager().process(modelledClass);
+                processingManager().process(modelledClass);//HERE!! CALL FUNC: ConditionalLoggingInstrumenter.process()
             } catch (ProcessInterruption e) {
                 continue;
             }
         }
-        compileModelledClasses(modelledClasses);
+        compileModelledClasses(modelledClasses);//modelledClasses has been INSTRUMENTED
     }
 
     private void setProcessors(Collection<? extends Processor<?>> processors) {

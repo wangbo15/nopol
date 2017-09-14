@@ -46,13 +46,13 @@ public class DynamicClassCompiler {
         return javaBytecodeFor(qualifiedNameAndContent, new HashMap<String, byte[]>());
     }
 
-    public synchronized Map<String, byte[]> javaBytecodeFor(Map<String, String> qualifiedNameAndContent, Map<String, byte[]> compiledDependencies) {
+    public synchronized Map<String, byte[]> javaBytecodeFor(Map<String, String> qualifiedNameAndContent, Map<String, byte[]> compiledDependencies) {//INSTRU
         //logDebug(logger(), format("[Compiling %d source files]", qualifiedNameAndContent.size()));
-        Collection<JavaFileObject> units = addCompilationUnits(qualifiedNameAndContent);
+        Collection<JavaFileObject> units = addCompilationUnits(qualifiedNameAndContent);//SOURCES
         fileManager().addCompiledClasses(compiledDependencies);
-        CompilationTask task = compiler().getTask(null, fileManager(), diagnostics(), options(), null, units);
+        CompilationTask task = compiler().getTask(null, fileManager(), diagnostics(), options(), null, units);//CompilationTask -> JDK
         runCompilationTask(task);
-        Map<String, byte[]> bytecodes = collectBytecodes(qualifiedNameAndContent);
+        Map<String, byte[]> bytecodes = collectBytecodes(qualifiedNameAndContent);  //ALREADY COMPILED
         //logDebug(logger(), format("[Compilation finished successfully (%d classes)]", bytecodes.size()));
         return bytecodes;
     }
@@ -111,7 +111,7 @@ public class DynamicClassCompiler {
         return options;
     }
 
-    protected VirtualFileObjectManager fileManager() {
+    protected VirtualFileObjectManager fileManager() {//VirtualFileObjectManager EXTENDS FROM JDK
         return fileManager;
     }
 
@@ -119,7 +119,7 @@ public class DynamicClassCompiler {
         return options;
     }
 
-    private JavaCompiler compiler() {
+    private JavaCompiler compiler() {// IMPORTANT: JavaCompiler IS BELONGS TO JDK
         return compiler;
     }
 
@@ -132,7 +132,7 @@ public class DynamicClassCompiler {
     }
 
     private List<String> options;
-    private JavaCompiler compiler;
-    private VirtualFileObjectManager fileManager;
-    private DiagnosticCollector<JavaFileObject> diagnostics;
+    private JavaCompiler compiler;  //FROM JDK
+    private VirtualFileObjectManager fileManager;   //EXTENDS FROM JDK
+    private DiagnosticCollector<JavaFileObject> diagnostics;    //FROM JDK
 }

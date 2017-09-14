@@ -99,7 +99,7 @@ public class NopolProcessorBuilder extends AbstractProcessor<CtStatement> {
                 break;
 
             case CONDITIONAL:
-                this.conditionalReplacer(statement);
+                this.conditionalReplacer(statement);//JUST RECORD ORI STMT
                 break;
 
             case PRECONDITION:

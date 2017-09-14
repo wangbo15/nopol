@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class VirtualFileObjectManager extends ForwardingJavaFileManager<JavaFileManager> {
+public class VirtualFileObjectManager extends ForwardingJavaFileManager<JavaFileManager> {//ForwardingJavaFileManager BELONGS TO JDK
 
     protected VirtualFileObjectManager(JavaFileManager fileManager) {
         super(fileManager);
