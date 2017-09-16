@@ -81,7 +81,7 @@ public final class ConstraintModelBuilder implements AngelicValue<Boolean> {
     /**
      * @see AngelicValue#collectSpecifications(URL[], List, Collection)
      */
-    public Collection<Specification<Boolean>> collectSpecifications(URL[] classpath, List<TestResult> testClasses, Collection<TestCase> failures) {//ANGELIC RELATED?
+    public Collection<Specification<Boolean>> collectSpecifications(URL[] classpath, List<TestResult> testClasses, Collection<TestCase> failures) {//ANGELIC RELATED, SET AS TRUE AND FALSE, THEN RUN
 
         System.err.println("######## ConstraintModelBuilder.collectSpecifications");
         System.err.println("\tfailures: " + failures.toString());
